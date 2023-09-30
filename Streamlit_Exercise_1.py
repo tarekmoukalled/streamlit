@@ -9,7 +9,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 # Load the dataset
-@st.cache  # Use Streamlit's cache to improve performance
+@st.cache_data  # Use st.cache_data instead of @st.cache
 def load_data():
     df = pd.read_csv("Global-Superstore.csv", encoding='latin1')
     df['Order Date'] = pd.to_datetime(df['Order Date'])
@@ -50,8 +50,10 @@ st.bar_chart(city_sales_data)
 # Create a line plot to visualize sales over time
 st.subheader("Sales Trend Over Time")
 monthly_sales = filtered_data.resample('M', on='Order Date')['Sales'].sum().reset_index()
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(monthly_sales['Order Date'], monthly_sales['Sales'], marker='o', linestyle='-')
+
+# Convert columns to NumPy arrays before indexing
+ax.plot(monthly_sales['Order Date'].values, monthly_sales['Sales'].values, marker='o', linestyle='-')
+
 ax.set_xlabel('Date')
 ax.set_ylabel('Total Sales')
 ax.set_title('Sales Trend Over Time')
@@ -67,4 +69,3 @@ ax.set_xlabel("Shipping Cost")
 ax.set_ylabel("Frequency")
 ax.set_title("Shipping Cost Distribution")
 st.pyplot(fig)
-
