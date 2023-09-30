@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("C:\\Users\\TM\\Desktop\\Global-Superstore.csv", encoding='latin1')
+df = pd.read_csv("Global-Superstore.csv", encoding='latin1')
 
 # Convert the 'Order Date' column to a datetime data type
 df['Order Date'] = pd.to_datetime(df['Order Date'])
