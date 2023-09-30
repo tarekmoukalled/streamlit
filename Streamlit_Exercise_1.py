@@ -4,15 +4,18 @@
 # In[2]:
 
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("Global-Superstore.csv", encoding='latin1')
+# Load the dataset
+@st.cache  # Use Streamlit's cache to improve performance
+def load_data():
+    df = pd.read_csv("Global-Superstore.csv", encoding='latin1')
+    df['Order Date'] = pd.to_datetime(df['Order Date'])
+    return df
 
-# Convert the 'Order Date' column to a datetime data type
-df['Order Date'] = pd.to_datetime(df['Order Date'])
+df = load_data()
 
 # Create a Streamlit app
 st.title("Interactive Data Exploration")
@@ -23,8 +26,9 @@ st.sidebar.header("Filter Data")
 # Filter by Category
 selected_category = st.sidebar.selectbox("Select Category", df["Category"].unique())
 
-# Filter by Sub-Category
-selected_sub_category = st.sidebar.selectbox("Select Sub-Category", df[df["Category"] == selected_category]["Sub-Category"].unique())
+# Filter by Sub-Category based on the selected category
+sub_categories = df[df["Category"] == selected_category]["Sub-Category"].unique()
+selected_sub_category = st.sidebar.selectbox("Select Sub-Category", sub_categories)
 
 # Filter by Region
 selected_region = st.sidebar.selectbox("Select Region", df["Region"].unique())
